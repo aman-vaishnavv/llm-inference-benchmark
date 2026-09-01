@@ -78,13 +78,3 @@ This is what makes long-context RAG practical — appending retrieved documents 
 **KV cache eliminates the prompt length bottleneck** — prefill is fast (parallel), decode dominates latency, and prompt length barely matters.
 
 **The latency vs throughput tradeoff is real** — small batches feel fast for individual users, large batches are efficient for the system. Production serving picks the right operating point based on SLA requirements.
-
----
-
-## What wasn't covered
-
-**Speculative decoding** — uses a small draft model to predict multiple tokens ahead, verified by the large model in parallel. Attempted with Qwen2.5 but blocked by vocab size mismatch between 7B (152064) and smaller models (151936) in this model family.
-
-**Tensor parallelism** — splitting the model across multiple GPUs for larger models that don't fit on one device. Relevant for 70B+ models in production.
-
-**Prefix caching** — reusing KV cache across requests that share a common prefix (system prompt, retrieved context). Significant latency win for RAG workloads.
